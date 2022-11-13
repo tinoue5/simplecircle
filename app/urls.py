@@ -12,14 +12,16 @@ urlpatterns = [
     path('portal',views.portal, name='portal'),
     path('bridge',views.bridge, name='bridge'),
     path('trytoken',views.trytoken, name='trytoken'),
-
-    path('empw_login',views.empw_login, name='empw_login'),
     path('logout_firebase',views.logout_firebase, name='logout_firebase'),
+
+    path('pp',views.pp,name='pp'),
+    path('tos',views.tos,name='tos'),
 
     # 不要っぽい
     path('register', views.register, name='register'),
     path('tokentest',views.tokentest, name='tokentest'),
     path('fbtest',views.fbtest, name='fbtest'),
     path('fbtest2',views.fbtest2, name='fbtest2'),
+    path('empw_login',views.empw_login, name='empw_login'),
 
 ]

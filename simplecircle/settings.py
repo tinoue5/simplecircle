@@ -19,12 +19,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@xn6*5_pn0h**a9#i$r5q64ttl%(m&)37bmq01cewvl+=h2@!1'
+SECRET_KEY = 'hwhpf3928HUHP(@WUSG283yhf@HJHKF239rh;SFDHOW23h:Kj23udJkd@JLFD'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost','192.168.0.6','solong.jp']
 
 # Application definition
 INSTALLED_APPS = [
@@ -116,7 +116,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/simplecircle/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
@@ -127,19 +127,16 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = '/app/portal'
-LOGIN_REDIRECT_URL = '/app/circle_board'
-LOGOUT_REDIRECT_URL = '/app/logout_firebase'
+LOGIN_URL = '/simplecircle/app/portal'
+LOGIN_REDIRECT_URL = '/simplecircle/app/circle_board'
+LOGOUT_REDIRECT_URL = '/simplecircle/app/logout_firebase'
 
 PUBLIC_PATHS = [
-	'/accounts/logout',
-    '/app/portal',
-    '/app/bridge',
-    '/app/trytoken',
-    '/app/fbtest',
-    '/app/register',
-    '/app/empw_login',
-    '/app/logout_firebase',
+	'/simplecircle/accounts/logout',
+    '/simplecircle/app/portal',
+    '/simplecircle/app/bridge',
+    '/simplecircle/app/trytoken',
+    '/simplecircle/app/logout_firebase',
 ]
 
 from django.contrib import messages

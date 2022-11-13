@@ -312,3 +312,9 @@ def empw_login(request):
 
 def logout_firebase(request):
     return render(request, 'logout_firebase.html')
+
+def pp(request):
+    return HttpResponse('Privacy Policy is not defined yet')
+
+def tos(request):
+    return HttpResponse('Terms of Service is not defined yet')
