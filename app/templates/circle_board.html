@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>Circle: {{circle.name}}</h1>
+
+{% include "message_area.html" %}
+
+<p>Hi {{request.user.first_name}}. <a href="{% url 'logout' %}">Logout</a></p>
+
+<h2>Message Board</h2>
+
+<p><a href="{% url 'app:make_invite_url' %}">Invite Someone Here.</a></p>
+
+{% for m in comments %}
+<p style="border: 1px solid #888; margin: 12px; padding: 10px;">
+  <span style="font-size: 0.72em; color: #999;">
+    {{m.user_posted.first_name}} said in {{m.posted_at}}
+  </span>
+  <br />
+  {{m.body}}
+</p>
+{% endfor %}
+
+<form method="POST"> {% csrf_token %}
+    <fieldset>
+      {% for field in form %}
+        <label>{{ field.label_tag }}</label>
+        <div>
+            {{ field }}
+            {{ field.errors }}
+        </div>
+      {% endfor %}
+      <input name="submit" type="submit" value="Post" />
+    </fieldset>
+</form>
+
+<h2>Change Circle</h2>
+  {% for c in swcs %}
+    <p><a href="{% url 'app:circle_switch' c.circle.id %}">
+      {{c.circle.name}}
+    </a></p>
+  {% endfor %}
+
+<h2>Create New Circle</h2>
+  <form action="{% url 'app:create_new_circle' %}" method="POST">
+    {% csrf_token %}
+    <fieldset>
+      {% for field in cform %}
+        <label>{{ field.label_tag }}</label>
+        <div>
+            {{ field }}
+            {{ field.errors }}
+        </div>
+      {% endfor %}
+      <input name="create" type="submit" value="Create" />
+    </fieldset>
+  </form>
+
+{% endblock %}

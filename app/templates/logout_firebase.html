@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script type="text/javascript" src="{% static 'js/jquery/jquery.min.js' %}"></script>
+    <title>Logout also from Firebase</title>
+  </head>
+  <body>
+
+    <h1>Simple Circle Service</h1>
+
+    <input type='hidden' value="" name="status" id="status" />
+
+    <p id="exit" style="visibility: hidden;"><a href="{% url 'app:portal' %}">Back to Logon Screen.</a></p>
+
+    <script type="text/javascript">
+      setInterval(nnn,1000);
+      function nnn(){
+        logon_check();
+        if($('#status').val() == 'logout'){
+            $("#exit").css('visibility','visible');
+        }
+      }
+    </script>
+
+
+
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js'
+      import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js'
+      import { getAuth, signInWithEmailAndPassword, signOut, signInWithRedirect,
+        onAuthStateChanged, GoogleAuthProvider, getRedirectResult }
+       from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js'
+      import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js'
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDn63P4LwWmB6udxvNXm_Ed10MJ26TjEaY",
+        authDomain: "practice-b5aa4.firebaseapp.com",
+        projectId: "practice-b5aa4",
+        storageBucket: "practice-b5aa4.appspot.com",
+        messagingSenderId: "405362124444",
+        appId: "1:405362124444:web:069b2c7b80394f8e742f59",
+        measurementId: "G-YVVSCENTP5"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+
+      window.logon_check = () => {
+        console.log(auth.currentUser);
+      }
+
+      signOut(auth).then(() => {
+        // Sign-out successful.
+        console.log("Logout Successful.")
+        window.document.getElementById("status").value = "logout";
+      }).catch((error) => {
+        // An error happened.
+      });
+
+    </script>
+
+    <script type="text/javascript">
+    </script>
+
+  </body>
+</html>

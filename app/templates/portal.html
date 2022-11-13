@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://www.gstatic.com/firebasejs/9.11.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.11.0/firebase-auth-compat.js"></script>
+    <script type="text/javascript">
+      var config = {
+        apiKey: "AIzaSyDn63P4LwWmB6udxvNXm_Ed10MJ26TjEaY",
+        authDomain: "practice-b5aa4.firebaseapp.com",
+        projectId: "practice-b5aa4",
+        storageBucket: "practice-b5aa4.appspot.com",
+        messagingSenderId: "405362124444",
+        appId: "1:405362124444:web:069b2c7b80394f8e742f59",
+      };
+      firebase.initializeApp(config);
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/ui/3.1.1/firebase-ui-auth__{{request.LANGUAGE_CODE}}.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/3.1.1/firebase-ui-auth.css" />
+    <title>SimpleCircle Logon</title>
+  </head>
+  <body>
+
+    <h1>Simple Circle Service</h1>
+
+    <div id="firebaseui-auth-container"></div>
+    <div id="loader">Loading...</div>
+
+    <button onclick="signout()">signout</button>
+
+    <script type="text/javascript">
+
+      var uiConfig = {
+        callbacks: {
+          signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+            return true;
+          },
+          uiShown: function() {
+            document.getElementById('loader').style.display = 'none';
+          }
+        },
+        signInFlow: 'redirect',
+        signInSuccessUrl: 'http://localhost:8000/app/bridge',
+        signInOptions: [
+          firebase.auth.EmailAuthProvider.PROVIDER_ID,
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+          firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+        ],
+
+        tosUrl: 'http://localhost:8000/app/term_of_service',
+        // Privacy policy url/callback.
+        privacyPolicyUrl: 'http://localhost:8000/app/privacy_policy',
+
+      };
+
+      var ui = new firebaseui.auth.AuthUI(firebase.auth());
+      ui.start('#firebaseui-auth-container', uiConfig);
+
+      firebase.auth().onAuthStateChanged(user => {
+        if (user == null){
+          console.log('Not logged in.')
+        } else {
+          console.log(user.uid);
+          console.log(user.email);
+          console.log(user.displayName);
+        }
+      });
+
+      function signout(){
+        firebase.auth().signOut();
+      }
+
+    </script>
+  </body>
+  </body>
+</html>

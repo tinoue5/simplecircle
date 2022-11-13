@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="{% static 'js/jquery/jquery.min.js' %}"></script>
+    <title>New user Register</title>
+  </head>
+  <body>
+
+    <h1>Simple Circle Service</h1>
+
+    <h2>Register New User</h2>
+
+    <form action="/app/register" id="regform" method="post">
+      {% csrf_token %}
+    <p><lable>Display Name</label><input type="text" name="name" id="name" /></p>
+    <p><lable>E-mail</label><input type="text" name="email" id="email" /></p>
+    <p><lable>Password</label><input type="password" name="password" id="password" /></p>
+
+    <input type="hidden" name="token" id="token" />
+    </form>
+
+    <p><button onclick="rg()">Register</button></p>
+
+    <script type="text/javascript">
+      function rg(){
+        // if(
+        var d = createuser(
+            $('#name').val(),
+            $('#email').val(),
+            $('#password').val());
+
+        console.log(d);
+        // ){
+        //   // formをsubmitさせて飛ぶ
+        //   // その先はアプリへの登録画面か、もしくはトップページに分岐
+        //   if($('#token').val() != ""){
+        //     $("#regform").submit();
+        //   }
+        // }else{
+        //   alert('Couldnt register to firebase.');
+        //   return false;
+        // }
+        return false;
+      }
+    </script>
+
+    <script type="text/javascript">
+      setInterval(nnn,1000);
+      function nnn(){
+        logon_check();
+        console.log($('#token').val());
+        if($('#token').val().length>0){
+          $('#regform').submit();
+        }
+      }
+    </script>
+
+    <p>
+
+    <h2>Debugging</h2>
+    <p><button onclick="currentUser()">CurrentUser</button></p>
+    <p><button onclick="logout()">Logout</button></p>
+
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js'
+      import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js'
+      import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+        updateProfile, signOut, signInWithRedirect,
+        onAuthStateChanged, GoogleAuthProvider, getRedirectResult }
+       from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js'
+      import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js'
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDn63P4LwWmB6udxvNXm_Ed10MJ26TjEaY",
+        authDomain: "practice-b5aa4.firebaseapp.com",
+        projectId: "practice-b5aa4",
+        storageBucket: "practice-b5aa4.appspot.com",
+        messagingSenderId: "405362124444",
+        appId: "1:405362124444:web:069b2c7b80394f8e742f59",
+        measurementId: "G-YVVSCENTP5"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+
+      window.createuser = (displayname, email, password) => {
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+
+            console.log(displayname);
+
+            const user = userCredential.user;
+            updateProfile(user,
+                { displayName: displayname }
+              ).then().catch((error) =>{
+                console.log('updateerror');
+              });
+
+            user.getIdToken(true).then((data) => {
+              window.document.getElementById("token").value =
+                eval(JSON.stringify(data));
+              });
+
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // ..
+          });
+      }
+
+      window.logon = (email, password) => {
+        // var email = $("email").val();
+        // var password = $("password").val();
+        console.log(email);
+        console.log(password);
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            console.log("Login Successful.")
+            // ...
+            return true;
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(error.code);
+            console.log(error.message);
+
+            return false;
+          });
+      }
+
+      window.currentUser = () => {
+        if(auth.currentUser==null){
+          console.log("Not logged in.")
+        }else{
+          console.log(auth.currentUser.displayName);
+          console.log(auth.currentUser.uid);
+          console.log(auth.currentUser.email);
+        }
+      }
+
+      window.logon_check = () => {
+
+        if(auth.currentUser==null){
+          return false;
+        }else{
+          auth.currentUser.getIdToken(true).then((data) => {
+            window.document.getElementById("token").value =
+              eval(JSON.stringify(data));
+          });
+        }
+      }
+
+      window.logout = () => {
+        signOut(auth).then(() => {
+          // Sign-out successful.
+          console.log("Logout Successful.")
+        }).catch((error) => {
+          // An error happened.
+        });
+      }
+
+
+
+    </script>
+
+    <script type="text/javascript">
+    </script>
+
+  </body>
+</html>

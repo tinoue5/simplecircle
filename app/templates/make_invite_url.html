@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <h1>Circle: {{circle.name}}</h1>
+
+{% include "message_area.html" %}
+
+    <p>Hi {{request.user.first_name}}. <a href="{% url 'logout' %}">Logout</a></p>
+
+    <h2>
+      Invite URL to <a href="{% url 'app:circle_board' %}">{{circle.name}}</a></h2>
+
+    <p>
+      <input type="text"
+        value="{{ request.scheme }}://{{ request.get_host }}{% url 'app:join_from_invite' inv.key %}"
+        size="120" />
+    </p>
+
+    <p><a href="{% url 'app:circle_board' %}">Back</a></p>
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="{% static 'js/jquery/jquery.min.js' %}"></script>
+    <script type="module" src="{% static 'js/fbauth.mjs' %}"></script>
+    <title>fbtest</title>
+  </head>
+  <body>
+
+    <h1>Simple Circle Service</h1>
+
+    <h2>Logon with E-mail and Password</h2>
+
+    <p><lable>E-mail</label><input type="text" id="email" /></p>
+    <p><lable>Password</label><input type="password" id="password" /></p>
+
+    <p><button onclick="lo()">Logon</button></p>
+
+    <form action="/app/empw_login" id="empw_logon" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="token" id="token" />
+    </form>
+
+    <script type="text/javascript">
+      function lo(){
+        logon($('#email').val(),$('#password').val());
+      }
+
+      function cu(){
+        ret = currentUser();
+        console.log(ret);
+      }
+    </script>
+
+    <!-- <script type="text/javascript">
+      setInterval(nnn,3000);
+      function nnn(){
+        logon_check();
+        if($('#token').val().length > 0){
+            $("#empw_logon").submit();
+        }
+      }
+    </script> -->
+
+    <p>
+
+    <h2>Logon By Google</h2>
+
+    <button onclick="loginRedirectGoogle()">Logon With Google ID</button>
+    <button onclick="getRedirectResultGoogle()">Redirect Logon Result Google ID</button>
+
+    <h2>Debugging</h2>
+    <p><button onclick="cu()">CurrentUser</button></p>
+    <p><button onclick="logout()">Logout</button></p>
+  </body>
+</html>

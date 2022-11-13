@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://www.gstatic.com/firebasejs/9.11.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.11.0/firebase-auth-compat.js"></script>
+    <script type="text/javascript">
+      var config = {
+        apiKey: "AIzaSyDn63P4LwWmB6udxvNXm_Ed10MJ26TjEaY",
+        authDomain: "practice-b5aa4.firebaseapp.com",
+        projectId: "practice-b5aa4",
+        storageBucket: "practice-b5aa4.appspot.com",
+        messagingSenderId: "405362124444",
+        appId: "1:405362124444:web:069b2c7b80394f8e742f59",
+      };
+      firebase.initializeApp(config);
+    </script>
+    <script type="text/javascript" src="{% static 'js/jquery/jquery.min.js' %}"></script>
+    <title>SimpleCircle Logon</title>
+  </head>
+  <body>
+
+    <div id="email_verify" class="email_verify" style="display: none;">
+      <p>Email Verification mail is sent to your address.</p>
+      <p>Please confirm it and follow the link. you can close this window.</p>
+    </div>
+    <script type="text/javascript">
+
+      firebase.auth().onAuthStateChanged(user => {
+        console.log(user.displayName)
+        if (user == null){
+          window.location.href = "{% url 'app:portal' %}";
+        } else {
+
+            user.getIdToken(true).then((data) => {
+
+              var token = eval(JSON.stringify(data));
+
+              $.post({
+                  url: "{% url 'app:trytoken' %}",
+                  data: {
+                    'token': token,
+                    'csrfmiddlewaretoken' : '{{ csrf_token }}'
+                  },
+                  dataType: 'json',
+                  success: function(rjson){
+                    console.log(rjson.vertoken);
+                    if (rjson.vertoken == false) {
+                      console.log('token error, redirect to portal');
+                    }else if(rjson.dloggedin == true){
+                      console.log('logged on to django, redirect.');
+                      window.location.href = "{% url 'app:circle_board' %}";
+                    }else {
+                      if(rjson.emailvalid == false){
+                        console.log('email has not verified yet.');
+                        document.getElementById('email_verify').style.display = 'block';
+                        var uri = new URL(window.location.href);
+                        var actionCodeSettings = {
+                          url: uri.origin + "{% url 'app:bridge' %}",
+                          handleCodeInApp: false
+                        };
+
+                        firebase.auth().currentUser.sendEmailVerification(actionCodeSettings);
+                      }
+                    }
+                  },
+                  error: function(){
+                    alert('Server Error');
+                  }
+
+              });
+          });
+        }
+      });
+    </script>
+  </body>
+  </body>
+</html>
